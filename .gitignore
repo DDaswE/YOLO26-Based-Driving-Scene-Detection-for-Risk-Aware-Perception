@@ -1,3 +1,6 @@
 .DS_Store
 **/.DS_Store
 .ipynb_checkpoints/
+.jupyter_tmp/
+.jupyter_data_tmp/
+backup/
