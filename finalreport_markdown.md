@@ -565,10 +565,12 @@ The most natural next steps follow directly from the limitations of the current 
 This notebook is intentionally concise. The main supporting files are included directly in this submission package:
 
 - Data preprocessing notebook: [`bdd100k_data_loading_visualization_4class.ipynb`](bdd100k_data_loading_visualization_4class.ipynb)
+- Dataset-distribution plotting utility for the converted four-class split summary: [`generate_dataset_distribution.py`](generate_dataset_distribution.py)
 - Training configuration: [`dataset.yaml`](dataset.yaml)
 - Training script: [`train_yolo.py`](train_yolo.py)
 - Final training artifacts and weights: [`newdata_yolo26_960run_100_32`](newdata_yolo26_960run_100_32)
 - Evaluation script and saved evaluation outputs: [`evaluate_yolo.py`](evaluate_yolo.py) and [`test_result`](test_result)
+- Ground-truth versus prediction comparison utility for selected test images: [`compare_gt_pred.py`](compare_gt_pred.py)
 - Video-generation code bundle (run `create_video/yolo_viz.py` to generate video): [`create_video.zip`](create_video.zip)
 - Final unseen-data demo videos: [Google Drive folder](https://drive.google.com/drive/folders/1_odBVfQlX-BqP8tH-Jy6-LwjgyKkdW8l?usp=sharing)
 

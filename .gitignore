@@ -4,3 +4,4 @@
 .jupyter_tmp/
 .jupyter_data_tmp/
 backup/
+.Rhistory
