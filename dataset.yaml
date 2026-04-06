@@ -1,0 +1,11 @@
+path: /Users/xuzichun/Desktop/project/data
+train: images/train
+val: images/val
+test: images/test
+
+# Classes
+names:
+  0: vehicle
+  1: person
+  2: traffic light
+  3: traffic sign
