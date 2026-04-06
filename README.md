@@ -212,7 +212,9 @@ We use **Ultralytics YOLO26n** as the final perception backbone. Earlier iterati
 
 
 ## 3.1. Training
-## <font color="red">NOTE: THIS WAS RUN ON A SERVER WITH 2 * RTX A6000</font>
+
+> [!CAUTION]
+> **This final training run was executed on a server with 2 × RTX A6000 GPUs.**
 
 
 
@@ -481,7 +483,19 @@ def risk_level(score, low_th=1.0, high_th=2.5):
 
 ## 6. Final Qualitative Results
 
-The completed system was tested on unseen Toronto dashcam footage. Each row below shows one matched sequence progressing from the original frame to the camera-view detection/risk overlay and then the top-down 2D risk visualization.
+Before testing the full visualization pipeline on unseen Toronto dashcam footage, we also inspected representative predictions on the held-out **BDD100K test split**. The side-by-side comparisons below show that the final detector generally captures the main vehicles, pedestrians, and traffic-control objects with good spatial alignment relative to ground truth. The remaining differences are concentrated in smaller, darker, or more cluttered regions rather than in the dominant scene structure.
+
+<img src="assets/testset_result_1.png" alt="Held-out BDD100K test example 1" width="980"/>
+
+*Held-out BDD100K test example (nighttime scene): the predicted boxes recover the main vehicles and traffic-control objects with scene layout that remains close to the ground-truth annotations.*
+
+<img src="assets/testset_result_2.png" alt="Held-out BDD100K test example 2" width="980"/>
+
+*Held-out BDD100K test example (urban intersection): the detector preserves the major scene structure and object categories, especially for vehicles and larger traffic-control objects, while minor discrepancies remain in denser regions.*
+
+### Unseen Toronto Dashcam Demo
+
+The completed system was then tested on unseen Toronto dashcam footage. Each row below shows one matched sequence progressing from the original frame to the camera-view detection/risk overlay and then the top-down 2D risk visualization.
 
 ![3x3 qualitative grid](assets/grid_3x3_sequences.png)
 
@@ -586,14 +600,24 @@ The most natural next steps follow directly from the limitations of the current 
 
 This notebook is intentionally concise. The main supporting files are included directly in this submission package:
 
-- Data preprocessing notebooks: [`bdd100k_data_loading_visualization_4class.ipynb`](bdd100k_data_loading_visualization_4class.ipynb) and [`convert_split.ipynb`](convert_split.ipynb)
+- Data preprocessing notebook: [`bdd100k_data_loading_visualization_4class.ipynb`](bdd100k_data_loading_visualization_4class.ipynb)
 - Training configuration: [`dataset.yaml`](dataset.yaml)
 - Training script: [`train_yolo.py`](train_yolo.py)
 - Final training artifacts and weights: [`newdata_yolo26_960run_100_32`](newdata_yolo26_960run_100_32)
 - Evaluation script and saved evaluation outputs: [`evaluate_yolo.py`](evaluate_yolo.py) and [`test_result`](test_result)
 - Video-generation code bundle: [`create_video.zip`](create_video.zip)
+- Final unseen-data demo videos: [Google Drive folder](https://drive.google.com/drive/folders/1_odBVfQlX-BqP8tH-Jy6-LwjgyKkdW8l?usp=sharing)
 
 Large converted-data folders and full demo videos are kept separate from the lightweight submission package, but the files above contain the code, configuration, trained weights, and result figures needed to inspect the final system.
+
+## 10. References
+
+- Bojarski, M., Del Testa, D., Dworakowski, D., Firner, B., Flepp, B., Jackel, L. D., Monfort, M., Muller, U., Zhang, J., Zhang, X., Zhao, J., & Zieba, K. (2016). *End to end learning for self-driving cars*. NVIDIA Technical Blog. https://developer.nvidia.com/blog/deep-learning-self-driving-cars/
+- Kazerouni, A., Heydarian, A., Soltany, M., Mohammadshahi, A., Omidi, A., & Ebadollahi, S. (2023). *An intelligent modular real-time vision-based system for environment perception*. arXiv. https://arxiv.org/abs/2303.16710
+- Kumamoto, Y., Ohtani, K., Suzuki, D., Yamataka, M., & Takeda, K. (2025). *AAT-DA: Accident anticipation transformer with driver attention*. In *Proceedings of the Winter Conference on Applications of Computer Vision (WACV) Workshops* (pp. 1142-1151). Computer Vision Foundation. https://openaccess.thecvf.com/content/WACV2025W/HAVI/html/Kumamoto_AAT-DA_Accident_Anticipation_Transformer_with_Driver_Attention_WACVW_2025_paper.html
+- Li, B. (2022). *Adaptive hierarchical representation learning for long-tailed object detection*. In *Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)* (pp. 2313-2322). Computer Vision Foundation. https://openaccess.thecvf.com/content/CVPR2022/html/Li_Adaptive_Hierarchical_Representation_Learning_for_Long-Tailed_Object_Detection_CVPR_2022_paper.html
+- Wu, D., Liao, M.-W., Zhang, W.-T., Wang, X.-G., Bai, X., Cheng, W.-Q., & Liu, W.-Y. (2022). *YOLOP: You only look once for panoptic driving perception*. *Machine Intelligence Research, 19*, 550-562. https://doi.org/10.1007/s11633-022-1339-y
+- Yu, F., Chen, H., Wang, X., Xian, W., Chen, Y., Liu, F., Madhavan, V., & Darrell, T. (2020). *BDD100K: A diverse driving dataset for heterogeneous multitask learning*. In *Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)* (pp. 2636-2645). Computer Vision Foundation. https://openaccess.thecvf.com/content_CVPR_2020/html/Yu_BDD100K_A_Diverse_Driving_Dataset_for_Heterogeneous_Multitask_Learning_CVPR_2020_paper.html
 
 ## Final Takeaway
 
