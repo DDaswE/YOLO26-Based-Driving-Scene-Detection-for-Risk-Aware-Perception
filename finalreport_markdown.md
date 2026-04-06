@@ -613,13 +613,14 @@ Large converted-data folders and full demo videos are kept separate from the lig
 ## 10. References
 
 - Bojarski, M., Del Testa, D., Dworakowski, D., Firner, B., Flepp, B., Jackel, L. D., Monfort, M., Muller, U., Zhang, J., Zhang, X., Zhao, J., & Zieba, K. (2016). *End to end learning for self-driving cars*. NVIDIA Technical Blog. https://developer.nvidia.com/blog/deep-learning-self-driving-cars/
+- Investopedia. (n.d.). *Exponential moving average (EMA)*. https://www.investopedia.com/terms/e/ema.asp
 - Kazerouni, A., Heydarian, A., Soltany, M., Mohammadshahi, A., Omidi, A., & Ebadollahi, S. (2023). *An intelligent modular real-time vision-based system for environment perception*. arXiv. https://arxiv.org/abs/2303.16710
 - Kumamoto, Y., Ohtani, K., Suzuki, D., Yamataka, M., & Takeda, K. (2025). *AAT-DA: Accident anticipation transformer with driver attention*. In *Proceedings of the Winter Conference on Applications of Computer Vision (WACV) Workshops* (pp. 1142-1151). Computer Vision Foundation. https://openaccess.thecvf.com/content/WACV2025W/HAVI/html/Kumamoto_AAT-DA_Accident_Anticipation_Transformer_with_Driver_Attention_WACVW_2025_paper.html
 - Li, B. (2022). *Adaptive hierarchical representation learning for long-tailed object detection*. In *Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)* (pp. 2313-2322). Computer Vision Foundation. https://openaccess.thecvf.com/content/CVPR2022/html/Li_Adaptive_Hierarchical_Representation_Learning_for_Long-Tailed_Object_Detection_CVPR_2022_paper.html
+- World Health Organization. (n.d.). *Road safety*. https://www.who.int/health-topics/road-safety#tab=tab_1
 - Wu, D., Liao, M.-W., Zhang, W.-T., Wang, X.-G., Bai, X., Cheng, W.-Q., & Liu, W.-Y. (2022). *YOLOP: You only look once for panoptic driving perception*. *Machine Intelligence Research, 19*, 550-562. https://doi.org/10.1007/s11633-022-1339-y
 - Yu, F., Chen, H., Wang, X., Xian, W., Chen, Y., Liu, F., Madhavan, V., & Darrell, T. (2020). *BDD100K: A diverse driving dataset for heterogeneous multitask learning*. In *Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)* (pp. 2636-2645). Computer Vision Foundation. https://openaccess.thecvf.com/content_CVPR_2020/html/Yu_BDD100K_A_Diverse_Driving_Dataset_for_Heterogeneous_Multitask_Learning_CVPR_2020_paper.html
 
 ## Final Takeaway
 
 This project shows that object-level detections from dashcam imagery can be transformed into a stable and interpretable driving-risk signal even without explicit risk labels. The main contribution is therefore not only the detector itself, but the **modular perception-to-risk framework** that connects detection, aggregation, and visualization into a coherent end-to-end system. More broadly, the project demonstrates that meaningful scene-level safety reasoning can be built from standard object-detection supervision when the pipeline is carefully designed for interpretability and robustness.
-
