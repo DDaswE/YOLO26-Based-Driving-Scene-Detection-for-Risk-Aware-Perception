@@ -147,15 +147,9 @@ The images below are the BDD100K class distribution visualization: original  VS 
 
 #### Converted four-class distribution
 
-<img src="https://raw.githubusercontent.com/DDaswE/YOLO26-Based-Driving-Scene-Detection-for-Risk-Aware-Perception/main/assets/download-1.png" alt="Converted four-class distribution" width="760"/>
+<img src="https://raw.githubusercontent.com/DDaswE/YOLO26-Based-Driving-Scene-Detection-for-Risk-Aware-Perception/main/assets/dataset_distribution.png" alt="Converted four-class distribution across train, val, and test splits" width="900"/>
 
-*Converted training-set distribution after remapping BDD100K labels into the four safety-relevant classes used by our detector.*
-
-#### Boxes per image after conversion
-
-<img src="https://raw.githubusercontent.com/DDaswE/YOLO26-Based-Driving-Scene-Detection-for-Risk-Aware-Perception/main/assets/download-2.png" alt="Boxes per image distribution" width="760"/>
-
-*Histogram of kept boxes per image on the converted training split, showing that scene density still varies substantially after label simplification.*
+*Converted four-class distribution across the train, val, and test splits after remapping BDD100K labels into the four safety-relevant classes used by our detector.*
 
 ---
 ### The two Images below show the BDD100k box geometry: original vs converted
