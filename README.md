@@ -3,7 +3,7 @@
 **MIE1517 - Introduction to Deep Learning, University of Toronto**  
 **Team 20:** Yanzhi Deng, Jimmy Jin, Edwin Xu, Zichun Xu
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/DDaswE/YOLO26-Based-Driving-Scene-Detection-for-Risk-Aware-Perception/blob/main/finalreport.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/DDaswE/YOLO26-Based-Driving-Scene-Detection-for-Risk-Aware-Perception/blob/main/finalreport.ipynb) [GitHub Repo](https://github.com/DDaswE/YOLO26-Based-Driving-Scene-Detection-for-Risk-Aware-Perception)
 
 > Opening this notebook in Colab creates a working copy. The source notebook in GitHub remains unchanged unless a user already has write access to this repository.
 
