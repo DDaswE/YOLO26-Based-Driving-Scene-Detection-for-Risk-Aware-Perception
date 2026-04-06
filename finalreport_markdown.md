@@ -3,19 +3,21 @@
 **MIE1517 - Introduction to Deep Learning, University of Toronto**  
 **Team 20:** Yanzhi Deng, Jimmy Jin, Edwin Xu, Zichun Xu
 
-This notebook is the **single final report notebook** for our project. It is organized as a concise walkthrough of the completed system: the problem setup, the key preprocessing decision, the final YOLO26n detector, the interpretable risk module, the final qualitative results, and the main lessons learned.
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/DDaswE/YOLO26-Based-Driving-Scene-Detection-for-Risk-Aware-Perception/blob/main/finalreport.ipynb)
 
+> Opening this notebook in Colab creates a working copy. The source notebook in GitHub remains unchanged unless a user already has write access to this repository.
+
+This notebook is the **single final report notebook** for our project. It is organized as a concise walkthrough of the completed system: the problem setup, the key preprocessing decision, the final YOLO26n detector, the interpretable risk module, the final qualitative results, and the main lessons learned.
 
 *Project summary: BDD100K preprocessing feeds the final YOLO26n detector, whose outputs are aggregated into an interpretable frame-level risk signal and visualized in both camera-view and top-down 2D form.*
 
-
 ### Project Overview: Result Preview
 
-<img src="assets/project_overview_demo_1.gif" alt="Result preview demo 1" width="760"/>
+<img src="https://raw.githubusercontent.com/DDaswE/YOLO26-Based-Driving-Scene-Detection-for-Risk-Aware-Perception/main/assets/project_overview_demo_1.gif" alt="Result preview demo 1" width="760"/>
 
 *Demo clip 1. Final annotated dashcam output showing bounding-box detections, class counts, and the smoothed risk panel on an urban intersection scene.*
 
-<img src="assets/project_overview_demo_2.gif" alt="Result preview demo 2" width="760"/>
+<img src="https://raw.githubusercontent.com/DDaswE/YOLO26-Based-Driving-Scene-Detection-for-Risk-Aware-Perception/main/assets/project_overview_demo_2.gif" alt="Result preview demo 2" width="760"/>
 
 *Demo clip 2. A second short segment from the final annotated video, illustrating how the risk signal evolves over time in a different traffic configuration.*
 
@@ -27,10 +29,8 @@ Our project asks a narrower technical question:
 
 > **How effectively can object-level detections from dashcam imagery be converted into a stable, interpretable scene-level driving risk signal?**
 
-
 Our goal:
 > **Detect road objects + Quantify scene danger**
-
 
 ## End-to-End Pipeline
 
@@ -54,12 +54,9 @@ The final system follows four stages:
 
 This notebook follows that same order so the final report reads like a walkthrough of the finished system, not a dump of every intermediate experiment.
 
-
 # 1. Environment Setup and Dataset Overview
 
-
 We first import the required libraries and define the dataset paths. A separate output directory is used for the converted four-class dataset so that old label versions are not mixed with the current conversion.
-
 
 ```python
 from pathlib import Path
@@ -89,13 +86,9 @@ We use **BDD100K**, a large-scale dashcam dataset with diverse weather, lighting
 
 BDD100K provides object-level labels, but it does **not** provide frame-level risk annotations. That constraint shaped the project: detection could be trained directly, but risk had to be formulated as an interpretable downstream proxy rather than an end-to-end supervised target.
 
-[BDD100k Image Download](http://128.32.162.150/bdd100k/bdd100k_images_100k.zip)
-
-[BDD100k Web Page](https://bdd-data.berkeley.edu/download.html)
-
+[BDD100K download page](http://bdd-data.berkeley.edu/download.html)
 
 ---
-
 
 ```python
 ROOT = Path(".")
@@ -128,7 +121,6 @@ print("Output root:", OUT_ROOT)
     Label root exists: True
     Output root: data_4class\data
 
-
 ## 2. Data Selection Strategy: Why Four Classes
 
 > **The original BDD100K labels are highly imbalanced and semantically uneven**.
@@ -144,30 +136,24 @@ To make the detector both more trainable and more aligned with downstream risk e
 
 This redesign reduced sparsity, simplified the learning target, and produced detector outputs that map naturally into the later risk module.
 
-
-
-
 ## 2.1. BDD100K Dataset Comparison: Original VS. Converted
 The images below are the BDD100K class distribution visualization: original  VS converted
 
-
-
-
 #### Original BDD100K distribution
 
-<img src="assets/download.png" alt="Original BDD100K class distribution" width="780"/>
+<img src="https://raw.githubusercontent.com/DDaswE/YOLO26-Based-Driving-Scene-Detection-for-Risk-Aware-Perception/main/assets/download.png" alt="Original BDD100K class distribution" width="780"/>
 
 *Original BDD100K class distribution before label merging. A few categories dominate the dataset, while several others appear only rarely.*
 
 #### Converted four-class distribution
 
-<img src="assets/download-1.png" alt="Converted four-class distribution" width="760"/>
+<img src="https://raw.githubusercontent.com/DDaswE/YOLO26-Based-Driving-Scene-Detection-for-Risk-Aware-Perception/main/assets/download-1.png" alt="Converted four-class distribution" width="760"/>
 
 *Converted training-set distribution after remapping BDD100K labels into the four safety-relevant classes used by our detector.*
 
 #### Boxes per image after conversion
 
-<img src="assets/download-2.png" alt="Boxes per image distribution" width="760"/>
+<img src="https://raw.githubusercontent.com/DDaswE/YOLO26-Based-Driving-Scene-Detection-for-Risk-Aware-Perception/main/assets/download-2.png" alt="Boxes per image distribution" width="760"/>
 
 *Histogram of kept boxes per image on the converted training split, showing that scene density still varies substantially after label simplification.*
 
@@ -176,13 +162,13 @@ The images below are the BDD100K class distribution visualization: original  VS 
 
 #### Original BDD100K box geometry
 
-<img src="assets/box_geometry_original.png" alt="Original BDD100K box geometry" width="820"/>
+<img src="https://raw.githubusercontent.com/DDaswE/YOLO26-Based-Driving-Scene-Detection-for-Risk-Aware-Perception/main/assets/box_geometry_original.png" alt="Original BDD100K box geometry" width="820"/>
 
 *Original BDD100K box geometry before label conversion.*
 
 #### Converted YOLO-format box geometry
 
-<img src="assets/box_geometry_converted.png" alt="Converted four-class box geometry" width="820"/>
+<img src="https://raw.githubusercontent.com/DDaswE/YOLO26-Based-Driving-Scene-Detection-for-Risk-Aware-Perception/main/assets/box_geometry_converted.png" alt="Converted four-class box geometry" width="820"/>
 
 *Converted four-class YOLO box geometry after remapping and normalization.*
 
@@ -210,13 +196,10 @@ We use **Ultralytics YOLO26n** as the final perception backbone. Earlier iterati
 - The nano model remained lightweight enough for video-style deployment demos.
 - YOLO-style outputs, namely bounding boxes, class IDs, and confidences, connect directly to the downstream risk model.
 
-
 ## 3.1. Training
 
 > [!CAUTION]
 > **This final training run was executed on a server with 2 × RTX A6000 GPUs.**
-
-
 
 ```python
 def train(epochs=100, batch_size=32, device='Server GPU'):
@@ -228,7 +211,6 @@ def train(epochs=100, batch_size=32, device='Server GPU'):
     model = YOLO('yolo26n.pt')
 
     print("--> Starting Training...")
-
 
     model.train(
         data='dataset.yaml', # Update this filename if you change your yaml
@@ -251,16 +233,13 @@ if __name__ == '__main__':
 
 ### 3.2 Training Results
 
-
-<img src="assets/TRAIN_VAL_CURVE.png" alt="Training and validation curves" width="860"/>
+<img src="https://raw.githubusercontent.com/DDaswE/YOLO26-Based-Driving-Scene-Detection-for-Risk-Aware-Perception/main/assets/TRAIN_VAL_CURVE.png" alt="Training and validation curves" width="860"/>
 
 *Training and validation curves from the final YOLO26n run, showing the evolution of loss and detection metrics over 100 epochs.*
 
 ## 4. Quantitative Results
 
 The final model achieved the following headline metrics on the test split:
-
-
 
 | Metric | Value |
 | --- | ---: |
@@ -269,11 +248,9 @@ The final model achieved the following headline metrics on the test split:
 | Precision | **0.7495** |
 | Recall | **0.6164** |
 
-
-
 Overall, the detector performs well for a compact four-class driving-scene model. The strongest category is `vehicle`, while recall is still weaker for smaller or more difficult targets such as pedestrians and some traffic-control objects.
 
-<img src="assets/SECTION5_CONFUSIONMATRIX.png" alt="Normalized confusion matrix" width="900"/>
+<img src="https://raw.githubusercontent.com/DDaswE/YOLO26-Based-Driving-Scene-Detection-for-Risk-Aware-Perception/main/assets/SECTION5_CONFUSIONMATRIX.png" alt="Normalized confusion matrix" width="900"/>
 
 *Normalized confusion matrix for the final detector, summarizing class-wise prediction quality on the held-out evaluation split.*
 
@@ -322,7 +299,6 @@ $$
 >
 > *   **Traffic Light Risk ($R_{\text{light}}$):** Scaled by the count of lights: $R_{\text{light}} = \alpha N_{\text{light}}$.
 > *   **Traffic Sign Risk ($R_{\text{sign}}$):** Scaled logarithmically by the count of signs: $R_{\text{sign}} = \beta \log(1 + N_{\text{sign}})$.
-
 
 ```python
 def compute_frame_risk(results, img_width, img_height):
@@ -417,7 +393,6 @@ def compute_frame_risk(results, img_width, img_height):
     }
 ```
 
-
 ---
 
 ### 5.3. Temporal Smoothing for Video
@@ -454,7 +429,6 @@ where typical thresholds are:
 - $T_1 = 1.0$
 - $T_2 = 2.5$
 
-
 ```python
 def update_ema_risk(current_risk, previous_ema=None, momentum=0.8):
     """Exponential moving average (EMA) for temporal smoothing.
@@ -468,7 +442,6 @@ def update_ema_risk(current_risk, previous_ema=None, momentum=0.8):
     if previous_ema is None:
         return current_risk
     return momentum * previous_ema + (1 - momentum) * current_risk
-
 
 def risk_level(score, low_th=1.0, high_th=2.5):
     """Map a continuous risk score to a discrete qualitative level.
@@ -485,11 +458,11 @@ def risk_level(score, low_th=1.0, high_th=2.5):
 
 Before testing the full visualization pipeline on unseen Toronto dashcam footage, we also inspected representative predictions on the held-out **BDD100K test split**. The side-by-side comparisons below show that the final detector generally captures the main vehicles, pedestrians, and traffic-control objects with good spatial alignment relative to ground truth. The remaining differences are concentrated in smaller, darker, or more cluttered regions rather than in the dominant scene structure.
 
-<img src="assets/testset_result_1.png" alt="Held-out BDD100K test example 1" width="980"/>
+<img src="https://raw.githubusercontent.com/DDaswE/YOLO26-Based-Driving-Scene-Detection-for-Risk-Aware-Perception/main/assets/testset_result_1.png" alt="Held-out BDD100K test example 1" width="980"/>
 
 *Held-out BDD100K test example (nighttime scene): the predicted boxes recover the main vehicles and traffic-control objects with scene layout that remains close to the ground-truth annotations.*
 
-<img src="assets/testset_result_2.png" alt="Held-out BDD100K test example 2" width="980"/>
+<img src="https://raw.githubusercontent.com/DDaswE/YOLO26-Based-Driving-Scene-Detection-for-Risk-Aware-Perception/main/assets/testset_result_2.png" alt="Held-out BDD100K test example 2" width="980"/>
 
 *Held-out BDD100K test example (urban intersection): the detector preserves the major scene structure and object categories, especially for vehicles and larger traffic-control objects, while minor discrepancies remain in denser regions.*
 
@@ -497,12 +470,11 @@ Before testing the full visualization pipeline on unseen Toronto dashcam footage
 
 The completed system was then tested on unseen Toronto dashcam footage. Each row below shows one matched sequence progressing from the original frame to the camera-view detection/risk overlay and then the top-down 2D risk visualization.
 
-![3x3 qualitative grid](assets/grid_3x3_sequences.png)
+![3x3 qualitative grid](https://raw.githubusercontent.com/DDaswE/YOLO26-Based-Driving-Scene-Detection-for-Risk-Aware-Perception/main/assets/grid_3x3_sequences.png)
 
 *Each row is one sequence: original frame, camera-view detection result, and matched top-down 2D risk view. The camera view preserves raw evidence, while the top-down view makes spatial layout and overall risk level easier to read.*
 
 ### Representative Interesting Failure Case
-
 
 This failure is best understood as a **semantic compression issue**. The stroller is classified as `vehicle`, not because the detector completely fails, but because [BDD100K](https://openaccess.thecvf.com/content_CVPR_2020/papers/Yu_BDD100K_A_Diverse_Driving_Dataset_for_Heterogeneous_Multitask_Learning_CVPR_2020_paper.pdf) does not provide stroller as a dedicated detection category, and our additional four-class remapping further compresses the label space. As a result, the model is forced to map an uncommon object to the nearest frequent category.
 
@@ -510,7 +482,7 @@ This interpretation is consistent with long-tailed detection literature, which s
 
 In our case, the stroller is not completely ignored, but its semantics are distorted. Although the category assignment is imperfect, the scene still produces a nonzero risk signal. A stroller implies a more vulnerable and context-sensitive situation than a generic vehicle, yet under our current formulation it inherits the geometric and semantic treatment of the `vehicle` class. This makes the risk output directionally reasonable, but semantically less precise.
 
-<img src="assets/section7_STROLLER.png" alt="Representative stroller failure case" width="900"/>
+<img src="https://raw.githubusercontent.com/DDaswE/YOLO26-Based-Driving-Scene-Detection-for-Risk-Aware-Perception/main/assets/section7_STROLLER.png" alt="Representative stroller failure case" width="900"/>
 
 *Semantic compression failure: the stroller is mapped to the merged `vehicle` category, so the scene still produces risk, but its vulnerability semantics are only partially preserved.*
 
@@ -578,7 +550,6 @@ We learned that:
 - **Temporal consistency is non-negotiable in video-based systems.**  
   Without EMA smoothing, the risk signal flickered heavily from frame to frame and the qualitative output felt unreliable, even when detection metrics were reasonable. This emphasized an important gap between standard computer-vision metrics and real user-facing system behavior.
 
-
 ## 8. Future Work
 
 The most natural next steps follow directly from the limitations of the current system.
@@ -595,7 +566,6 @@ The most natural next steps follow directly from the limitations of the current 
 - **Learn the risk function more systematically:**  
   The current risk weights and thresholds are hand-tuned for interpretability. A future direction is to replace them with a learned or weakly supervised formulation that preserves transparency while improving calibration.
 
-
 ## 9. Reproducibility and Key Artifacts
 
 This notebook is intentionally concise. The main supporting files are included directly in this submission package:
@@ -605,7 +575,7 @@ This notebook is intentionally concise. The main supporting files are included d
 - Training script: [`train_yolo.py`](train_yolo.py)
 - Final training artifacts and weights: [`newdata_yolo26_960run_100_32`](newdata_yolo26_960run_100_32)
 - Evaluation script and saved evaluation outputs: [`evaluate_yolo.py`](evaluate_yolo.py) and [`test_result`](test_result)
-- Video-generation code bundle: [`create_video.zip`](create_video.zip)
+- Video-generation code bundle (run `create_video/yolo_viz.py` to generate video): [`create_video.zip`](create_video.zip)
 - Final unseen-data demo videos: [Google Drive folder](https://drive.google.com/drive/folders/1_odBVfQlX-BqP8tH-Jy6-LwjgyKkdW8l?usp=sharing)
 
 Large converted-data folders and full demo videos are kept separate from the lightweight submission package, but the files above contain the code, configuration, trained weights, and result figures needed to inspect the final system.
